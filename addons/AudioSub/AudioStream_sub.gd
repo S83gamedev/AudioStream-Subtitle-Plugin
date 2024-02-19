@@ -60,17 +60,25 @@ func _process(delta):
 #if self is playing the text is visible
 # and the description is equal to text
 	if self.playing:
-		if self.get_child_count() >= 2:
+		if self.get_child_count() >= 1:
 			self.get_child(0).visible = true
-			self.get_child(1).visible = true
 			self.get_child(0).text = str(self.desc)
 			self.get_child(0).add_theme_font_size_override('font_size', font_size)
 			self.get_child(0).add_theme_color_override('font_shadow_color', shadow_color )
 			self.get_child(0).add_theme_constant_override('shadow_outline_size', Shadow_outline_size)
+
+	if self.playing:
+		if self.get_child_count() == 2:
+			self.get_child(1).visible = true
+
 # if it's not playing, then the visible will be false
 #   aka it will be hidden
 	elif self.playing == false:
-		if self.get_child_count() >= 2:
+		if self.get_child_count() == 1:
+			self.get_child(0).visible = false
+
+	if self.playing == false:
+		if self.get_child_count() == 2:
 			self.get_child(0).visible = false
 			self.get_child(1).visible = false
 
