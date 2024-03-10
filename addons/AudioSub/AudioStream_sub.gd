@@ -23,7 +23,9 @@ extends AudioStreamPlayer
 #This is for undertale similar text effect
 #it kinda animates the text progresive
 #which doesn't work rn
-@export_range(0,1) var visible_ratio : float = 1
+#BUT Visible characters works
+@export_range(-1, 3000) var visible_characters : int = -1
+#@export_range(0,1) var visible_ratio : float = 1
 
 @export var timer_enable : bool = false
 @export var timer_int : float = 1
@@ -36,6 +38,12 @@ extends AudioStreamPlayer
 @export var Square_color : Color = Color(1,0.35,0.56,0.78)
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	#this is for bug fixing in case
+#	 if anyone accidently add a child and cause crash
+	if get_child_count() > 0:
+		print("! bro Please Don't add child node")
+		get_child(get_child_count() - 1).queue_free()
+
 # by labeltx I mean, label's text
 	# when the scene runs audioSub will have a child
 # audiosub will have a child of a label node
@@ -66,6 +74,7 @@ func _process(delta):
 			self.get_child(0).add_theme_font_size_override('font_size', font_size)
 			self.get_child(0).add_theme_color_override('font_shadow_color', shadow_color )
 			self.get_child(0).add_theme_constant_override('shadow_outline_size', Shadow_outline_size)
+			self.get_child(0).visible_characters = visible_characters
 
 	if self.playing:
 		if self.get_child_count() == 2:
@@ -92,6 +101,7 @@ func _process(delta):
 
 
 func Background_sub():
+	var lbl = self.get_child(0)
 	var cube = ColorRect.new()
 	if self.get_children().size() < 2:
 		cube.name = "squre_bag"
@@ -100,7 +110,7 @@ func Background_sub():
 		cube.color = Square_color
 		cube.z_index = -1
 		cube.position = self.get_child(0).position - Vector2(font_size / 2,1)
-		cube.size = Vector2(float(font_size *3),float(font_size *2))
+		cube.size = lbl.size
 #		cube.scale = Vector2(float(font_size ),float(font_size ))
 		if self.playing:
 			cube.visible = true
