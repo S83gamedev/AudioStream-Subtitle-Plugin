@@ -12,6 +12,9 @@ Instruction/ How to use:
 4- Add node and search for name AudioStream_Sub
 
 Update Log:
-/  0.85.2 - enhanced and fixed some bugs
-  0.85.4 - tried to fix but didn't worked
-  0.86.6 - actually fixed so many things ( background_square size, adding child crashes, changed some codes to be more felixible, that's all I can remember
+
+0.85.2 - enhanced and fixed some bugs
+
+0.85.4 - tried to fix but didn't worked
+
+0.86.6 - actually fixed so many things ( background_square size, adding child crashes, changed some codes to be more felixible, that's all I can remember
