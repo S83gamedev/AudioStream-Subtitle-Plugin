@@ -36,13 +36,13 @@ extends AudioStreamPlayer
 @export_group("Background Text")
 @export var Square_BG : bool = false
 @export var Square_color : Color = Color(1,0.35,0.56,0.78)
+@export var cube_z_index : int = -1
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	#this is for bug fixing in case
 #	 if anyone accidently add a child and cause crash
-	if get_child_count() > 0:
-		print("! bro Please Don't add child node")
-		get_child(get_child_count() - 1).queue_free()
+#	for childd in get_children():
+#		childd.queue_free()
 
 # by labeltx I mean, label's text
 	# when the scene runs audioSub will have a child
@@ -51,6 +51,7 @@ func _ready():
 	var labeltx = Label.new()
 	labeltx.name = "Labeltx"
 	add_child(labeltx, true)
+	move_child(labeltx, 0)
 # NOTE: you can switch it to rich text label if you want to but I like it simple
 # idk if it make an error or something I just tested with label node
 
@@ -60,7 +61,7 @@ func _process(delta):
 
 	#for every labels in child of the audiosub node
 	#this will effect their position and scale all together
-	if self.get_children().size() == 1:
+	if self.get_children().size() >= 1:
 		for label in self.get_children():
 			label.position = text_position
 			label.scale = text_scale
@@ -75,19 +76,28 @@ func _process(delta):
 			self.get_child(0).add_theme_color_override('font_shadow_color', shadow_color )
 			self.get_child(0).add_theme_constant_override('shadow_outline_size', Shadow_outline_size)
 			self.get_child(0).visible_characters = visible_characters
+#			text_position += Vector2(1,-1)
 
 	if self.playing:
-		if self.get_child_count() == 2:
-			self.get_child(1).visible = true
+		if self.get_child_count() >= 2:
+			if get_child(1).name == "squre_bag":
+				self.get_child(1).visible = true
+				get_child(1).size.y = get_child(0).size.y
 
+				get_child(1).size.x = get_child(0).size.x * 1.2
+				get_child(1).position = self.get_child(0).position - Vector2(font_size / 2,1)
+				get_child(1).color = Square_color
+				get_child(1).z_index = cube_z_index
+###############
+###########
 # if it's not playing, then the visible will be false
 #   aka it will be hidden
 	elif self.playing == false:
-		if self.get_child_count() == 1:
+		if self.get_child_count() >= 1:
 			self.get_child(0).visible = false
 
 	if self.playing == false:
-		if self.get_child_count() == 2:
+		if self.get_child_count() >= 2:
 			self.get_child(0).visible = false
 			self.get_child(1).visible = false
 
@@ -103,15 +113,11 @@ func _process(delta):
 func Background_sub():
 	var lbl = self.get_child(0)
 	var cube = ColorRect.new()
-	if self.get_children().size() < 2:
+	if self.get_children().size() <= 2:
 		cube.name = "squre_bag"
 		add_child(cube)
-	if self.get_child_count() == 2:
-		cube.color = Square_color
-		cube.z_index = -1
-		cube.position = self.get_child(0).position - Vector2(font_size / 2,1)
-		cube.size = lbl.size
-#		cube.scale = Vector2(float(font_size ),float(font_size ))
+		move_child(cube, 1)
+	if self.get_children().size() >= 2:
 		if self.playing:
 			cube.visible = true
 		elif self.playing == false:
