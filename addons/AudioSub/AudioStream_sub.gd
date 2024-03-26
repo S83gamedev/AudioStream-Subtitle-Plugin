@@ -51,7 +51,7 @@ func _ready():
 	var labeltx = Label.new()
 	labeltx.name = "Labeltx"
 	add_child(labeltx, true)
-	move_child(labeltx, 0)
+
 # NOTE: you can switch it to rich text label if you want to but I like it simple
 # idk if it make an error or something I just tested with label node
 
@@ -113,10 +113,10 @@ func _process(delta):
 func Background_sub():
 	var lbl = self.get_child(0)
 	var cube = ColorRect.new()
-	if self.get_children().size() <= 2:
+	if self.get_children().size() < 2:
 		cube.name = "squre_bag"
 		add_child(cube)
-		move_child(cube, 1)
+
 	if self.get_children().size() >= 2:
 		if self.playing:
 			cube.visible = true
